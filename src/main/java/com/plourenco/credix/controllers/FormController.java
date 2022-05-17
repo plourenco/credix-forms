@@ -5,6 +5,7 @@ import com.plourenco.credix.entities.FormQuestion;
 import com.plourenco.credix.entities.FormQuestionResponse;
 import com.plourenco.credix.repositories.FormRepository;
 import com.plourenco.credix.entities.Form;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -38,6 +39,10 @@ public class FormController {
         return "Greetings from Spring Boot!";
     }
 
+    /**
+     * Create a form definition.
+     * @param form the form object to create
+     */
     @PostMapping("/forms/definitions")
     public void formCreate(@RequestBody @Valid Form form) {
         for (FormQuestion question : form.getQuestions()) {
@@ -46,16 +51,31 @@ public class FormController {
         repository.saveAndFlush(form);
     }
 
+    /**
+     * List all forms.
+     * @return the list of forms
+     */
     @GetMapping("/forms")
     public List<Form> forms() {
         return repository.findAll();
     }
 
+    /**
+     * Get the details for a specific form id.
+     * @param id the form id
+     * @return the form details
+     */
     @GetMapping("/forms/{id}")
     public Form formDetails(@PathVariable int id) {
         return repository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
+    /**
+     * Get form entries for a specific questionId having an integer value greater than 3.
+     * @param formId the form id
+     * @param questionId the question id
+     * @return the form responses adhering to the criteria above
+     */
     @GetMapping("/forms/{formId}/entries/{questionId}")
     public List<FormQuestionResponse> formEntries(@PathVariable int formId, @PathVariable int questionId) {
         // Assuming a fixed query of entries with more than 3 years
@@ -70,6 +90,11 @@ public class FormController {
         return entityManager.createQuery(query.where(withForm, withQuestion, hasYears)).getResultList();
     }
 
+    /**
+     * Submit form question responses
+     * @param id the form id
+     * @param responses the form responses as a Map of {questionId: response}
+     */
     @PostMapping("/forms/{id}/entries")
     public void formSubmit(@PathVariable int id, @RequestBody Map<Integer, String> responses) {
         Form form = repository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));

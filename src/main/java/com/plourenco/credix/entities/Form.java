@@ -3,6 +3,7 @@ package com.plourenco.credix.entities;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -16,6 +17,7 @@ public class Form {
     @Id
     @GeneratedValue
     @JsonInclude
+    @Schema(hidden=true)
     private int id;
 
     @NotBlank
