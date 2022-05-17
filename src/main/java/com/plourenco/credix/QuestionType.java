@@ -26,19 +26,27 @@ public enum QuestionType {
         }
     });
 
-    private final TypeValidator validator;
+    private final TypeParser validator;
 
-    QuestionType(TypeValidator validator) {
+    QuestionType(TypeParser validator) {
         this.validator = validator;
     }
 
-    public Object validate(String value) throws IllegalArgumentException {
-        return validator.validate(value);
+    public Object parse(String value) throws IllegalArgumentException {
+        return validator.parse(value);
+    }
+
+    public boolean isValid(String value) {
+        try {
+            this.parse(value);
+            return true;
+        } catch (IllegalArgumentException ignored) {}
+        return false;
     }
 }
 
-interface TypeValidator {
-    Object validate(String value) throws IllegalArgumentException;
+interface TypeParser {
+    Object parse(String value) throws IllegalArgumentException;
 }
 
 @JsonDeserialize(using = PairDeserializer.class)

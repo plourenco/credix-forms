@@ -1,5 +1,6 @@
 package com.plourenco.credix.controllers;
 
+import com.fasterxml.jackson.databind.jsonschema.JsonSerializableSchema;
 import com.plourenco.credix.entities.FormQuestion;
 import com.plourenco.credix.entities.FormQuestionResponse;
 import com.plourenco.credix.repositories.FormRepository;

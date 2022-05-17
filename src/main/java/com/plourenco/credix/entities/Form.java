@@ -59,11 +59,7 @@ public class Form {
     public boolean isValid(Map<Integer, String> responses) {
         for (FormQuestion question : questions) {
             String value = responses.get(question.getId());
-            try {
-                question.getType().validate(value);
-            } catch(IllegalArgumentException e) {
-                return false;
-            }
+            if (!question.getType().isValid(value)) return false;
         }
         return true;
     }
